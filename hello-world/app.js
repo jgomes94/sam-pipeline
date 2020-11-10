@@ -2,6 +2,8 @@
 let response;
 
 exports.lambdaHandler = async (event, context) => {
+    console.log('testing');
+
     try {
         response = {
             'statusCode': 200,
