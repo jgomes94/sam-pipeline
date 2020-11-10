@@ -2,7 +2,7 @@
 let response;
 
 exports.lambdaHandler = async (event, context) => {
-    console.log('testing');
+    console.log('testing2');
 
     try {
         response = {
