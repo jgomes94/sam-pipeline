@@ -6,6 +6,7 @@ phases:
       node: 10
   build:
     commands:
+      - ls
       - npm cache clean
       - npm install
 
