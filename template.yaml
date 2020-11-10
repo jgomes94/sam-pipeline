@@ -42,7 +42,7 @@ Parameters:
 
   GitHubOAuthToken:
     Type: String
-    Default: dc4f4e3ef7f23014613d251b36fac7e64c4db209 
+    Default: 192a69c3520bff276c3d5915c33b38676bc99a32 
     Description: CodePipeline requires an OAuthToken
 
 Resources:
@@ -204,13 +204,13 @@ Resources:
                 PollForSourceChanges: true
                 OAuthToken: !Ref GitHubOAuthToken
               OutputArtifacts:
-                - Name: TheSourceCode
+                - Name: sourceCode
         - Name: BuildDeploy
           Actions:
             - Name: Build-Deploy
               RunOrder: 1
               InputArtifacts:
-                - Name: TheSourceCode
+                - Name: sourceCode
               ActionTypeId:
                 Category: Build
                 Owner: AWS
@@ -219,7 +219,7 @@ Resources:
               Configuration:
                 ProjectName:  !Ref BuildDeploy
               OutputArtifacts:
-                - Name: TheArtifact2
+                - Name: BuildOutput
 
   BuildDeploy:
     Type: "AWS::CodeBuild::Project"
