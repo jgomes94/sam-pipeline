@@ -7,7 +7,6 @@ phases:
   build:
     commands:
       - ls
-      - npm cache clean
       - npm install
 
 artifacts:
