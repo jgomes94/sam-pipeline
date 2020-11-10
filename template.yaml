@@ -1,0 +1,279 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+  Environment:
+    AllowedValues:
+    - dev
+    - stg
+    - prod
+    Description: 'Environment'
+    Type: 'String'
+    Default: 'prod'
+
+  CodePipelineBucketPrefix:
+    Description: CodePipeline needs a utility bucket for its internal use. Specify a unique prefix for the bucket name
+    Type: String
+    Default: codepipeline-work-
+
+  GitHubUser:
+    Type: String
+    Default: jgomes94
+    Description: owner/repository/branch
+
+  GitHubRepository:
+    Type: String
+    Default: sam-pipeline
+    Description: owner/repository/branch
+
+  GitHubBranch:
+    Type: String
+    Default: master
+    Description: owner/repository/branch
+
+  GitHubOAuthToken:
+    Type: String
+    Default: dc4f4e3ef7f23014613d251b36fac7e64c4db209 
+    Description: CodePipeline requires an OAuthToken
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: hello-world/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+  #!ROLES!
+  CodeBuildRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName:
+        'Fn::Join': [ "", ["CodeBuildRole", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: "codebuild.amazonaws.com"
+          Action: "sts:AssumeRole"
+
+  CodePipelineRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName:
+        'Fn::Join': [ "", ["CodePipelineRole", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: "codepipeline.amazonaws.com"
+          Action: "sts:AssumeRole"
+  #!POLICIES
+  CodeBuildPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName:
+        'Fn::Join': [ "", ["CodeBuildPolicy", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            - logs:DescribeLogGroups
+            - logs:FilterLogEvents
+            - logs:DescribeLogStreams
+            - logs:DeleteLogGroup
+            - s3:putObject
+            - s3:getObject
+            - codebuild:*
+            - 'cloudformation:List*'
+            - 'cloudformation:Get*'
+            - 'cloudformation:PreviewStackUpdate'
+            - 'cloudformation:ValidateTemplate'
+            - 'cloudformation:CreateStack'
+            - 'cloudformation:CreateUploadBucket'
+            - 'cloudformation:DeleteStack'
+            - 'cloudformation:Describe*'
+            - 'cloudformation:UpdateStack'
+            - 'lambda:Get*'
+            - 'lambda:List*'
+            - 'lambda:CreateFunction'
+            - 'lambda:AddPermission'
+            - 'lambda:CreateAlias'
+            - 'lambda:DeleteFunction'
+            - 'lambda:InvokeFunction'
+            - 'lambda:PublishVersion'
+            - 'lambda:RemovePermission'
+            - 'lambda:Update*'
+            - 'apigateway:GET'
+            - 'apigateway:POST'
+            - 'apigateway:PUT'
+            - 'apigateway:DELETE'
+            - 's3:CreateBucket'
+            - 's3:DeleteBucket'
+            - 's3:ListBucket'
+            - 's3:ListBucketVersions'
+            - 's3:PutObject'
+            - 's3:GetObject'
+            - 's3:DeleteObject'
+            - 'iam:PassRole'
+            - 'kinesis:*'
+            - 'iam:GetRole'
+            - 'iam:CreateRole'
+            - 'iam:PutRolePolicy'
+            - 'iam:DeleteRolePolicy'
+            - 'iam:DeleteRole'
+            - 'cloudwatch:GetMetricStatistics'
+            - 'events:Put*'
+            - 'events:Remove*'
+            - 'events:Delete*'
+            - 'dynamodb:*'
+          Resource: "*"
+      Roles:
+        -  !Ref CodeBuildRole
+
+  CodePipelinePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName:
+        'Fn::Join': [ "", ["CodePipelinePolicy", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            - s3:putObject
+            - s3:getObject
+            - codebuild:*
+          Resource:
+            - "*"
+      Roles:
+        -  !Ref CodePipelineRole
+
+  #BUCKET
+  S3:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Join [ "", [!Ref CodePipelineBucketPrefix, "-", !Ref "AWS::Region"]]
+
+  Pipeline:
+    Type: "AWS::CodePipeline::Pipeline"
+    Properties:
+      Name: !Join [ "", ["DevOps-Pipeline", "-", !Ref 'AWS::StackName'] ]
+      ArtifactStore:
+        Location: !Ref S3
+        Type: S3
+      RestartExecutionOnUpdate: true
+      RoleArn: !Join [ "", ["arn:aws:iam::", !Ref "AWS::AccountId", ":role/", !Ref CodePipelineRole  ] ]
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceAction
+              RunOrder: 1
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                Owner: !Ref GitHubUser
+                Repo: !Ref GitHubRepository
+                Branch: !Ref GitHubBranch
+                PollForSourceChanges: true
+                OAuthToken: !Ref GitHubOAuthToken
+              OutputArtifacts:
+                - Name: TheSourceCode
+        - Name: BuildDeploy
+          Actions:
+            - Name: Build-Deploy
+              RunOrder: 1
+              InputArtifacts:
+                - Name: TheSourceCode
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              Configuration:
+                ProjectName:  !Ref BuildDeploy
+              OutputArtifacts:
+                - Name: TheArtifact2
+
+  BuildDeploy:
+    Type: "AWS::CodeBuild::Project"
+    Properties:
+      Name: Build-Deploy
+      Description: Demo of CodeBuild with CodeDeploy pipeline.
+      ServiceRole: !Ref CodeBuildRole
+      TimeoutInMinutes: 5
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+            version: 0.2
+            phases:
+              build:
+                commands:
+                  - npm install
+      Environment:
+        Type: "LINUX_CONTAINER"
+        ComputeType: BUILD_GENERAL1_SMALL
+        EnvironmentVariables:
+          - Name: env
+            Type: PLAINTEXT
+            Value: !Ref Environment
+        Image: aws/codebuild/nodejs:10.1.0
+      Artifacts:
+        Type: CODEPIPELINE
+  
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  HelloWorldFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunction.Arn
+  HelloWorldFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt HelloWorldFunctionRole.Arn
+  CodeBuild:
+    Value: !Ref Pipeline
+  Environment:
+    Value: !Ref Environment
+  Github:
+    Value: !Ref GitHubRepository
+  CodeBuildRole:
+    Value: !Ref CodeBuildRole
+  CodeBuildPolicy:
+    Value: !Ref CodeBuildPolicy
+  CodePipelineRole:
+    Value: !Ref CodePipelineRole
+  CodePipelinePolicy:
+    Value: !Ref CodePipelinePolicy
+  S3:
+    Value: !Ref S3

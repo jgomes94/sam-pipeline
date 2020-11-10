@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-pipeline"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-rasdax12s"
+s3_prefix = "sam-pipeline"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
