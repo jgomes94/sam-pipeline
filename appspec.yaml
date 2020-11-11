@@ -1,0 +1,8 @@
+resources:
+  - name-of-function-to-deploy:
+      type: "AWS::Lambda::Function"
+      properties:
+        name: HelloWorldFunction
+        alias: HelloWorldFunctionAlias
+        currentversion: 1
+        targetversion: 1
