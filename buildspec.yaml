@@ -11,10 +11,7 @@ phases:
   post_build:
     commands: 
       - export REVISION="revisionType=S3,s3Location{bucket=$BUCKET_DEPLOYMENTS,key=$CODEBUILD_BUILD_ID/appspec.yaml,bundleType=YAML}"
-      - aws deploy create-deployment \
-        --application-name=$APPLICATION_NAME \
-        --deployment-group-name=$DEPLOYMENT_GROUP_NAME \ 
-        --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
+      - aws deploy create-deployment --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
 
 artifacts:
   files:
