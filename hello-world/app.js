@@ -3,6 +3,7 @@ let response;
 
 exports.lambdaHandler = async (event, context) => {
     console.log('testing2');
+    console.log('testing3');
 
     try {
         response = {
