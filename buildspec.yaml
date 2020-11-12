@@ -23,4 +23,8 @@ phases:
 artifacts:
   files:
     - "**/*"
-    - appspec.yaml
+  secondary-artifacts:
+  appspec:
+    files:
+      - appspec.yaml
+    discard-paths: yes
