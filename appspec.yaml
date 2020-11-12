@@ -5,4 +5,4 @@ resources:
         name: "sam-pipeline-HelloWorldFunction-1IZP3TJOI9B0S"
         alias: "helloworld"
         currentversion: 1
-        targetversion: 1
+        targetversion: 4
