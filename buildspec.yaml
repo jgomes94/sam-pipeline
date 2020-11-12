@@ -9,13 +9,13 @@ phases:
       - ls
   post_build:
     commands:
-      - export REVISION="{"revisionType":"S3", "s3Location":"{"bucket":"$BUCKET_DEPLOYMENTS","key":"DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_SOURCE_VERSION/appspec.yaml","bundleType":"YAML"}"}"
+      - export REVISION="{"revisionType":"S3", "s3Location":"{"bucket":"$BUCKET_DEPLOYMENTS","key":"DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_BATCH_BUILD_IDENTIFIER/appspec.yaml","bundleType":"YAML"}"}"
       - echo $REVISION
       - echo "$BUCKET_DEPLOYMENTS"
       - echo $APPLICATION_NAME
       - echo $DEPLOYMENT_GROUP_NAME
-      - echo "DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_SOURCE_VERSION/appspec.yaml"
-      - echo $CODEBUILD_SOURCE_VERSION
+      - echo "DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_BATCH_BUILD_IDENTIFIER/appspec.yaml"
+      - echo $CODEBUILD_BATCH_BUILD_IDENTIFIER
       - aws deploy create-deployment --revision=$REVISION --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
 
 artifacts:
