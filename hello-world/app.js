@@ -3,6 +3,7 @@ let response;
 
 exports.lambdaHandler = async (event, context) => {
     console.log('DOES THIS WORK!?!!!')
+    console.log('D22222')
     try {
         response = {
             'statusCode': 200,
