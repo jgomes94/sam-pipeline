@@ -12,7 +12,7 @@ phases:
       - echo DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_KMS_KEY_ID/appspec.yaml
       - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
       - export REVISION='{"revisionType":"S3","s3Location":'{\"bucket\":\"$BUCKET_DEPLOYMENTS\",\"key\":\"DevOps-Pipeline-sam-/BuildOutpu/appspec.yaml\",\"bundleType\":\"YAML\"}'}'
-      - aws deploy create-deployment --revision=$REVISION --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
+      - aws deploy create-deployment --revision=$REVISION --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaAllAtOnce'
 
 artifacts:
   files:
