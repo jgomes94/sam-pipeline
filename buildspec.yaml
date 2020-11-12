@@ -10,8 +10,8 @@ phases:
   post_build:
     commands:
       - echo DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_KMS_KEY_ID/appspec.yaml
-      - echo $CODEBUILD_SOURCE_REPO_URL/
-      - export REVISION='{"revisionType":"S3", "s3Location":'{"bucket":"$BUCKET_DEPLOYMENTS", "key":"$CODEBUILD_SOURCE_REPO_URL/appspec.yaml", "bundleType":"YAML"}'}'
+      - echo $CODEBUILD_SRC_DIR/
+      - export REVISION='{"revisionType":"S3", "s3Location":'{"bucket":"$BUCKET_DEPLOYMENTS", "key":"$CODEBUILD_SRC_DIR/appspec.yaml", "bundleType":"YAML"}'}'
       - aws deploy create-deployment --revision=$REVISION --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
 
 artifacts:
