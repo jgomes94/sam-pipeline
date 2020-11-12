@@ -2,6 +2,6 @@ resources:
   - name-of-function-to-deploy:
       type: "AWS::Lambda::Function"
       properties:
-        name: sam-pipeline-HelloWorldFunction-1IZP3TJOI9B0S
-        currentversion: 1
-        targetversion: 1
+        name: "sam-pipeline-HelloWorldFunction-1IZP3TJOI9B0S"
+        currentversion: "1"
+        targetversion: "2"
