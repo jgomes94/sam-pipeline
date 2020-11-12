@@ -15,7 +15,6 @@ phases:
       - echo $CODEBUILD_INITIATOR
       - echo $CODEBUILD_BUILD_NUMBER
       - echo $CODEBUILD_BUILD_ID
-      - echo $CODEBUILD_BUILD_ARN
       - echo $CODEBUILD_BATCH_BUILD_IDENTIFIER
       - echo $BUCKET_DEPLOYMENTS
       - export REVISION='{"revisionType":"S3","s3Location":'{\"bucket\":\"$BUCKET_DEPLOYMENTS\",\"key\":\"DevOps-Pipeline-sam-/BuildOutpu/3hqSM09/appspec.yaml\",\"bundleType\":\"YAML\"}'}'
