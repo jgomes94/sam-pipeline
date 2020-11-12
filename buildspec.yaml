@@ -14,7 +14,8 @@ phases:
       - echo $BUCKET_DEPLOYMENTS
       - echo $APPLICATION_NAME
       - echo $DEPLOYMENT_GROUP_NAME
-      - echo $BUCKET_DEPLOYMENTS "key"DevOps-Pipeline-sam-/BuildOutpu/:$CODEBUILD_BUILD_ID/appspec.yaml
+      - echo DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_BUILD_ID/appspec.yaml
+      - echo CODEBUILD_BUILD_ID
       - aws deploy create-deployment --revision=$REVISION --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
 
 artifacts:
