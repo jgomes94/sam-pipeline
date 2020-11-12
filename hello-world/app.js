@@ -7,6 +7,7 @@ exports.lambdaHandler = async (event, context) => {
     console.log('D3333')
     console.log('D3333')
     console.log('D3333')
+    console.log('D3333')
 
     try {
         response = {
