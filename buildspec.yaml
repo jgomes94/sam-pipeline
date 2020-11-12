@@ -24,7 +24,7 @@ artifacts:
   files:
     - "**/*"
   secondary-artifacts:
-  appspec:
-    files:
-      - appspec.yaml
-    discard-paths: yes
+    appspec:
+      files:
+        - appspec.yaml
+      discard-paths: yes
