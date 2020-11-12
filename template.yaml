@@ -2,7 +2,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   sam-app
-
   Sample SAM Template for sam-app
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
@@ -13,12 +12,12 @@ Globals:
 Parameters:
   Environment:
     AllowedValues:
-    - dev
-    - stg
-    - prod
-    Description: 'Environment'
-    Type: 'String'
-    Default: 'prod'
+      - dev
+      - stg
+      - prod
+    Description: "Environment"
+    Type: "String"
+    Default: "prod"
 
   CodePipelineBucketPrefix:
     Description: CodePipeline needs a utility bucket for its internal use. Specify a unique prefix for the bucket name
@@ -63,7 +62,17 @@ Resources:
     Type: "AWS::IAM::Role"
     Properties:
       RoleName:
-        'Fn::Join': [ "", ["CodeBuildRole", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+        "Fn::Join":
+          [
+            "",
+            [
+              "CodeBuildRole",
+              "-",
+              !Ref "AWS::StackName",
+              "-",
+              !Ref "Environment",
+            ],
+          ]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -76,20 +85,69 @@ Resources:
     Type: "AWS::IAM::Role"
     Properties:
       RoleName:
-        'Fn::Join': [ "", ["CodePipelineRole", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+        "Fn::Join":
+          [
+            "",
+            [
+              "CodePipelineRole",
+              "-",
+              !Ref "AWS::StackName",
+              "-",
+              !Ref "Environment",
+            ],
+          ]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
-          Effect: "Allow"
-          Principal:
-            Service: "codepipeline.amazonaws.com"
-          Action: "sts:AssumeRole"
+          - Effect: "Allow"
+            Principal:
+              Service: "codepipeline.amazonaws.com"
+            Action: "sts:AssumeRole"
+
+
+  CodeDeployRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName:
+        "Fn::Join":
+          [
+            "",
+            [
+              "CodeDeployRole",
+              "-",
+              !Ref "AWS::StackName",
+              "-",
+              !Ref "Environment",
+            ],
+          ]
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "codedeploy.amazonaws.com"
+            Action: "sts:AssumeRole"
+          - Effect: "Allow"
+            Principal:
+              Service: "s3.amazonaws.com"
+            Action: "sts:AssumeRole"
+
   #!POLICIES
   CodeBuildPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
       PolicyName:
-        'Fn::Join': [ "", ["CodeBuildPolicy", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+        "Fn::Join":
+          [
+            "",
+            [
+              "CodeBuildPolicy",
+              "-",
+              !Ref "AWS::StackName",
+              "-",
+              !Ref "Environment",
+            ],
+          ]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -105,57 +163,68 @@ Resources:
             - s3:putObject
             - s3:getObject
             - codebuild:*
-            - 'cloudformation:List*'
-            - 'cloudformation:Get*'
-            - 'cloudformation:PreviewStackUpdate'
-            - 'cloudformation:ValidateTemplate'
-            - 'cloudformation:CreateStack'
-            - 'cloudformation:CreateUploadBucket'
-            - 'cloudformation:DeleteStack'
-            - 'cloudformation:Describe*'
-            - 'cloudformation:UpdateStack'
-            - 'lambda:Get*'
-            - 'lambda:List*'
-            - 'lambda:CreateFunction'
-            - 'lambda:AddPermission'
-            - 'lambda:CreateAlias'
-            - 'lambda:DeleteFunction'
-            - 'lambda:InvokeFunction'
-            - 'lambda:PublishVersion'
-            - 'lambda:RemovePermission'
-            - 'lambda:Update*'
-            - 'apigateway:GET'
-            - 'apigateway:POST'
-            - 'apigateway:PUT'
-            - 'apigateway:DELETE'
-            - 's3:CreateBucket'
-            - 's3:DeleteBucket'
-            - 's3:ListBucket'
-            - 's3:ListBucketVersions'
-            - 's3:PutObject'
-            - 's3:GetObject'
-            - 's3:DeleteObject'
-            - 'iam:PassRole'
-            - 'kinesis:*'
-            - 'iam:GetRole'
-            - 'iam:CreateRole'
-            - 'iam:PutRolePolicy'
-            - 'iam:DeleteRolePolicy'
-            - 'iam:DeleteRole'
-            - 'cloudwatch:GetMetricStatistics'
-            - 'events:Put*'
-            - 'events:Remove*'
-            - 'events:Delete*'
-            - 'dynamodb:*'
+            - "cloudformation:List*"
+            - "cloudformation:Get*"
+            - "cloudformation:PreviewStackUpdate"
+            - "cloudformation:ValidateTemplate"
+            - "cloudformation:CreateStack"
+            - "cloudformation:CreateUploadBucket"
+            - "cloudformation:DeleteStack"
+            - "cloudformation:Describe*"
+            - "cloudformation:UpdateStack"
+            - "lambda:Get*"
+            - "lambda:List*"
+            - "lambda:CreateFunction"
+            - "lambda:AddPermission"
+            - "lambda:CreateAlias"
+            - "lambda:DeleteFunction"
+            - "lambda:InvokeFunction"
+            - "lambda:PublishVersion"
+            - "lambda:RemovePermission"
+            - "lambda:Update*"
+            - "apigateway:GET"
+            - "apigateway:POST"
+            - "apigateway:PUT"
+            - "apigateway:DELETE"
+            - "s3:CreateBucket"
+            - "s3:DeleteBucket"
+            - "s3:ListBucket"
+            - "s3:ListBucketVersions"
+            - "s3:PutObject"
+            - "s3:GetObject"
+            - "s3:DeleteObject"
+            - "iam:PassRole"
+            - "kinesis:*"
+            - "iam:GetRole"
+            - "iam:CreateRole"
+            - "iam:PutRolePolicy"
+            - "iam:DeleteRolePolicy"
+            - "iam:DeleteRole"
+            - "cloudwatch:GetMetricStatistics"
+            - "events:Put*"
+            - "events:Remove*"
+            - "events:Delete*"
+            - "dynamodb:*"
+            - "codedeploy:*"
           Resource: "*"
       Roles:
-        -  !Ref CodeBuildRole
+        - !Ref CodeBuildRole
 
   CodePipelinePolicy:
     Type: "AWS::IAM::Policy"
     Properties:
       PolicyName:
-        'Fn::Join': [ "", ["CodePipelinePolicy", "-", !Ref 'AWS::StackName', "-", !Ref 'Environment']]
+        "Fn::Join":
+          [
+            "",
+            [
+              "CodePipelinePolicy",
+              "-",
+              !Ref "AWS::StackName",
+              "-",
+              !Ref "Environment",
+            ],
+          ]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -167,26 +236,37 @@ Resources:
             - s3:putObject
             - s3:getObject
             - codebuild:*
+            - "codedeploy:*"
           Resource:
             - "*"
       Roles:
-        -  !Ref CodePipelineRole
+        - !Ref CodePipelineRole
 
   #BUCKET
   S3:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Join [ "", [!Ref CodePipelineBucketPrefix, "-", !Ref "AWS::Region"]]
+      BucketName:
+        !Join ["", [!Ref CodePipelineBucketPrefix, "-", !Ref "AWS::Region"]]
 
   Pipeline:
     Type: "AWS::CodePipeline::Pipeline"
     Properties:
-      Name: !Join [ "", ["DevOps-Pipeline", "-", !Ref 'AWS::StackName'] ]
+      Name: !Join ["", ["DevOps-Pipeline", "-", !Ref "AWS::StackName"]]
       ArtifactStore:
         Location: !Ref S3
         Type: S3
       RestartExecutionOnUpdate: true
-      RoleArn: !Join [ "", ["arn:aws:iam::", !Ref "AWS::AccountId", ":role/", !Ref CodePipelineRole  ] ]
+      RoleArn:
+        !Join [
+          "",
+          [
+            "arn:aws:iam::",
+            !Ref "AWS::AccountId",
+            ":role/",
+            !Ref CodePipelineRole,
+          ],
+        ]
       Stages:
         - Name: Source
           Actions:
@@ -217,23 +297,10 @@ Resources:
                 Provider: CodeBuild
                 Version: 1
               Configuration:
-                ProjectName:  !Ref BuildDeploy
+                ProjectName: !Ref BuildDeploy
               OutputArtifacts:
                 - Name: BuildOutput
-        - Name: Deploy
-          Actions:
-            - Name: Build-Deploy
-              RunOrder: 3
-              InputArtifacts:
-                - Name: BuildOutput
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Provider: CodeDeploy
-                Version: 1
-              Configuration:
-                ProjectName:  !Ref BuildDeploy
-          
+
   BuildDeploy:
     Type: "AWS::CodeBuild::Project"
     Properties:
@@ -248,19 +315,32 @@ Resources:
         Type: "LINUX_CONTAINER"
         ComputeType: BUILD_GENERAL1_SMALL
         EnvironmentVariables:
-          - Name: env
+          - Name: APPLICATION_NAME
             Type: PLAINTEXT
-            Value: !Ref Environment
+            Value: !Ref CodeDeployApplication
+          - Name: DEPLOYMENT_GROUP_NAME
+            Type: PLAINTEXT
+            Value: !Ref DeploymentGroup
+          - Name: BUCKET_DEPLOYMENTS
+            Type: PLAINTEXT
+            Value: !Ref S3
         Image: aws/codebuild/nodejs:10.1.0
       Artifacts:
         Type: CODEPIPELINE
-  
-  Deploy:
+
+  CodeDeployApplication:
     Type: AWS::CodeDeploy::Application
     Properties: 
-      ApplicationName: !GetAtt HelloWorldFunction.Arn
       ComputePlatform: Lambda
-  
+
+  DeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApplication
+      ServiceRoleArn: !Sub "${CodeDeployRole.Arn}"
+      DeploymentStyle:
+        DeploymentOption: WITH_TRAFFIC_CONTROL
+        DeploymentType: BLUE_GREEN
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
