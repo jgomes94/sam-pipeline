@@ -18,7 +18,7 @@ phases:
       - echo $CODEBUILD_BUILD_ARN
       - echo $CODEBUILD_BATCH_BUILD_IDENTIFIER
       - echo $BUCKET_DEPLOYMENTS
-      - export REVISION='{"revisionType":"S3","s3Location":\'{"bucket":"$BUCKET_DEPLOYMENTS","key":"codepipeline-work--us-east-1/DevOps-Pipeline-sam-/BuildOutpu/3hqSM09.zip/appspec.yaml","bundleType":"YAML"}\'}'
+      - export REVISION='{"revisionType":"S3","s3Location":"{"bucket":"$BUCKET_DEPLOYMENTS","key":"codepipeline-work--us-east-1/DevOps-Pipeline-sam-/BuildOutpu/3hqSM09.zip/appspec.yaml","bundleType":"YAML"}"}'
       - aws deploy create-deployment --revision=$REVISION --application-name=$APPLICATION_NAME --deployment-group-name=$DEPLOYMENT_GROUP_NAME --deployment-config-name='CodeDeployDefault.LambdaCanary10Percent30Minutes'
 
 artifacts:
