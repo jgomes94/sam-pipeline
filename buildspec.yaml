@@ -8,13 +8,12 @@ phases:
   build:
     commands:
       - python --version
+      - echo hiii, new version
       - pip install aws-sam-cli
   post_build:
     commands:
       - echo hiii, new version
       - sam deploy
-
 artifacts:
   files:
     - "**/*"
-    - appspec.yaml
