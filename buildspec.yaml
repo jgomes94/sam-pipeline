@@ -6,7 +6,7 @@ phases:
       node: 10
   build:
     commands:
-      - ls
+      - npm install -g sam
   post_build:
     commands:
       - echo DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_KMS_KEY_ID/appspec.yaml
