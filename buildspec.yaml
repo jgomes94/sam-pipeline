@@ -6,12 +6,13 @@ phases:
       node: 10
   build:
     commands:
-      - npm install -g sam
+      - npm install aws-cli -g
   post_build:
     commands:
       - echo DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_KMS_KEY_ID/appspec.yaml
       - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
       - export REVISION='{"revisionType":"S3","s3Location":'{\"bucket\":\"$BUCKET_DEPLOYMENTS\",\"key\":\"DevOps-Pipeline-sam-/BuildOutpu/appspec.yaml\",\"bundleType\":\"YAML\"}'}'
+
       - sam deploy
 
 artifacts:
