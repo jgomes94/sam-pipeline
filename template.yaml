@@ -41,7 +41,7 @@ Parameters:
 
   GitHubOAuthToken:
     Type: String
-    Default: 192a69c3520bff276c3d5915c33b38676bc99a32 
+    Default: b5d7c25dd6391c58da8830fb2593e8648fced3ea
     Description: CodePipeline requires an OAuthToken
 
 Resources:
@@ -168,17 +168,6 @@ Resources:
             - s3:putObject
             - s3:getObject
             - codebuild:*
-            - "cloudformation:List*"
-            - "cloudformation:Get*"
-            - "cloudformation:PreviewStackUpdate"
-            - "cloudformation:ValidateTemplate"
-            - "cloudformation:CreateStack"
-            - "cloudformation:CreateUploadBucket"
-            - "cloudformation:DeleteStack"
-            - "cloudformation:Describe*"
-            - "cloudformation:UpdateStack"
-            - "cloudformation:CreateChangeSet"
-            - "cloudformation:ExecuteChangeSet"
             - "lambda:Get*"
             - "lambda:List*"
             - "lambda:CreateFunction"
