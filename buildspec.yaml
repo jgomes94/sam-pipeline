@@ -7,7 +7,7 @@ phases:
   build:
     commands:
       - python --version
-      - pip install requests==2.5.3
+      - pip install requests[security]
       - pip install aws-sam-cli
   post_build:
     commands:
