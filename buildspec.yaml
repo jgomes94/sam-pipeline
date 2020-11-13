@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3
+      python: 3.7
       node: 10
   build:
     commands:
@@ -11,9 +11,7 @@ phases:
       - pip install aws-sam-cli
   post_build:
     commands:
-      - echo DevOps-Pipeline-sam-/BuildOutpu/$CODEBUILD_KMS_KEY_ID/appspec.yaml
-      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
-      - export REVISION='{"revisionType":"S3","s3Location":'{\"bucket\":\"$BUCKET_DEPLOYMENTS\",\"key\":\"DevOps-Pipeline-sam-/BuildOutpu/appspec.yaml\",\"bundleType\":\"YAML\"}'}'
+      - echo hiii, new version
       - sam deploy
 
 artifacts:
