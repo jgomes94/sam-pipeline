@@ -3,8 +3,8 @@ version: 0.2
 phases:
   install:
     runtime-versions:
+      python: 3
       node: 10
-      python: 3.x
   build:
     commands:
       - python --version
