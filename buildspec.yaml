@@ -10,7 +10,7 @@ phases:
     commands:
       - echo hiii, new version
       - sam build
-      - sam deploy
+      - sam deploy --no-confirm-changeset
 artifacts:
   files:
     - "**/*"
