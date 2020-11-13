@@ -9,6 +9,7 @@ phases:
   post_build:
     commands:
       - echo hiii, new version
+      - sam build
       - sam deploy
 artifacts:
   files:
