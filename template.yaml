@@ -77,10 +77,14 @@ Resources:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
-          Effect: "Allow"
-          Principal:
-            Service: "codebuild.amazonaws.com"
-          Action: "sts:AssumeRole"
+          - Effect: "Allow"
+            Principal:
+              Service: "codebuild.amazonaws.com"
+            Action: "sts:AssumeRole"
+          - Effect: "Allow"
+            Principal:
+              Service: "cloudformation.amazonaws.com"
+            Action: "sts:AssumeRole"
 
   CodePipelineRole:
     Type: "AWS::IAM::Role"
@@ -173,6 +177,8 @@ Resources:
             - "cloudformation:DeleteStack"
             - "cloudformation:Describe*"
             - "cloudformation:UpdateStack"
+            - "cloudformation:CreateChangeSet"
+            - "cloudformation:ExecuteChangeSet"
             - "lambda:Get*"
             - "lambda:List*"
             - "lambda:CreateFunction"
@@ -202,11 +208,10 @@ Resources:
             - "iam:DeleteRolePolicy"
             - "iam:DeleteRole"
             - "cloudwatch:GetMetricStatistics"
-            - "events:Put*"
-            - "events:Remove*"
-            - "events:Delete*"
             - "dynamodb:*"
             - "codedeploy:*"
+            - "iam:*"
+            - "cloudformation:*"
           Resource: "*"
       Roles:
         - !Ref CodeBuildRole
