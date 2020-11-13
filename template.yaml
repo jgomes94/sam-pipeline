@@ -325,7 +325,7 @@ Resources:
           - Name: BUCKET_DEPLOYMENTS
             Type: PLAINTEXT
             Value: !Ref S3
-        Image: aws/codebuild/python:3.8
+        Image: aws/codebuild/standard:4.0
       Artifacts:
         Type: CODEPIPELINE
 
